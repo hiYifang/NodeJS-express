@@ -29,6 +29,33 @@ const usersSchema = new mongoose.Schema(
       minlength: 8,
       select: false
     },
+    // 設計稿 4.追蹤名單
+    followers: [ // 自己
+      {
+        user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+        createdAt: { // 建立時間
+          type: Date,
+          default: Date.now
+        },
+        updatedAt: { // 更新時間
+          type: Date,
+          default: Date.now
+        },
+      }
+    ],
+    following: [ // 別人
+      {
+        user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+        createdAt: { // 建立時間
+          type: Date,
+          default: Date.now
+        },
+        updatedAt: { // 更新時間
+          type: Date,
+          default: Date.now
+        },
+      }
+    ],
     createdAt: { // 建立時間
       type: Date,
       default: Date.now
