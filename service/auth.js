@@ -13,22 +13,22 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(appError(401, '請輸入帳號密碼進行登入！', "", next));
+    return next(appError(401, '請輸入帳號密碼進行登入！', "token"));
   }
 
   // 驗證 token 正確性 - 解密 token
   const getDecryptedJWT = (token) => jwt.verify(token, process.env.JWT_SECRET);
   const decoded = getDecryptedJWT(token);
   if(!decoded){
-    return next(appError(401, '請輸入帳號密碼進行登入！', "", next));
+    return next(appError(401, '請輸入帳號密碼進行登入！', "decoded"));
   }
 
-  const currentEditor = await User.findById(decoded.id);
-  if (!currentEditor) {
-    return next(appError(401, '請輸入帳號密碼進行登入！', "", next));
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(appError(401, '請輸入帳號密碼進行登入！', "decoded.id"));
   }
 
-  req.user = currentEditor; // 自訂屬性，傳到下一個 middleware
+  req.user = currentUser; // 自訂屬性，傳到下一個 middleware
   next();
 });
 
@@ -42,4 +42,3 @@ module.exports = {
   isAuth,
   getJWT
 }
-
