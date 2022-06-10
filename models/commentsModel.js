@@ -34,7 +34,7 @@ const commentsSchema = new mongoose.Schema(
 commentsSchema.pre(/^find/, function (next) { // 前置器：使用 find 找尋 collections 裡面的資料
   this.populate({
     path: 'user',
-    select: '_id nickName createdAt'
+    select: 'id nickName createdAt'
   });
   next();
 });

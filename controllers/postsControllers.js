@@ -109,7 +109,7 @@ const posts = {
     }
 
     const newPost = await Post.create({
-      user: user,
+      user: user._id,
       content,
       image
     });

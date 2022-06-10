@@ -23,23 +23,21 @@ const users = {
     }).populate({
       path: "user",
       select: "_id nickName"
-    }).select('-messages')
-      .sort({
-        createdAt: -1,
-      });
+    }).select('-comments');
     res.status(200).json(getHttpResponse(likeList));
   }),
   // 取得個人追蹤名單
   getFollowList: handleErrorAsync(async (req, res) => {
     const { user } = req;
     const following = await User.find({ user: user._id })
+      .populate({ path: 'followers.user', select: 'nickName avatar' })
       .populate({ path: 'following.user', select: 'nickName avatar' });
     res.status(200).json(getHttpResponse(following));
   }),
   // 註冊會員
   signUp: handleErrorAsync(async (req, res, next) => {
-    const { 
-      body: { 
+    let {
+      body: {
         email,
         password,
         nickName
@@ -86,10 +84,10 @@ const users = {
   }),
   // 登入會員
   signIn: handleErrorAsync(async (req, res, next) => {
-    const { 
-      body: { 
+    const {
+      body: {
         email,
-        password 
+        password
       }
     } = req;
 
@@ -163,15 +161,16 @@ const users = {
         $addToSet: { followers: { user: user.id } }
       }
     );
+
     res.status(200).json(getHttpResponse({ message: '已追蹤！' }));
   }),
   // 重設密碼
   updatePassword: handleErrorAsync(async (req, res, next) => {
-    const { 
-      user, 
-      body: { 
+    const {
+      user,
+      body: {
         password,
-        confirmPassword 
+        confirmPassword
       }
     } = req;
 
@@ -197,13 +196,13 @@ const users = {
   }),
   // 更新個人資料
   patchProfile: handleErrorAsync(async (req, res, next) => {
-    const { 
-      user, 
-      body: { 
-        nickName, 
-        gender, 
-        avatar 
-      } 
+    const {
+      user,
+      body: {
+        nickName,
+        gender,
+        avatar
+      }
     } = req;
 
     if (!nickName) {
@@ -231,7 +230,7 @@ const users = {
     }
 
     if (userID === user.id) {
-      return next(appError(400, "無法追蹤自己", "userID"))
+      return next(appError(400, "無法取消追蹤自己", "userID"))
     }
 
     const existedUser = await User.findById(userID);
