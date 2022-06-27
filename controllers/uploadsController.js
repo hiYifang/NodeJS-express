@@ -1,19 +1,19 @@
-const { appError, handleErrorAsync } = require('../service/errorHandler');
+const { appError } = require('../service/errorHandler');
 const getHttpResponse = require('../service/successHandler');
 
 const sizeOf = require('image-size');
 const { ImgurClient } = require('imgur');
 
 const uploads = {
-  postImage: handleErrorAsync(async (req, res, next) => {
+  async postImage(req, res, next) {
     const { files } = req;
     if (!files.length) {
-      return next(appError(400, "尚未上傳檔案", "upload"))
+      return next(appError(400, '尚未上傳檔案', 'upload'));
     }
 
     const dimensions = sizeOf(files[0].buffer);
     if (dimensions.width !== dimensions.height) {
-      return next(appError(400, "圖片長寬不符合 1:1 尺寸", "upload"))
+      return next(appError(400, '圖片長寬不符合 1:1 尺寸', 'upload'));
     }
 
     const client = new ImgurClient({
@@ -28,7 +28,7 @@ const uploads = {
     });
 
     res.status(201).json(getHttpResponse({ imageUrl: response.data.link }));
-  })
+  }
 }
 
 module.exports = uploads;

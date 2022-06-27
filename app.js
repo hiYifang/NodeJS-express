@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const rateLimit = require("express-rate-limit");
+const rateLimit = require('express-rate-limit');
 
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
@@ -36,7 +36,7 @@ require('./service/process');
 const { appError, errorHandlerMainProcess } = require('./service/errorHandler');
 // HTTP 狀態碼：404
 app.use((req, res, next) => {
-  next(appError(404, "無此路由資訊", "routes"));
+  next(appError(404, '無此路由資訊', 'routes'));
 });
 app.use(errorHandlerMainProcess);
 

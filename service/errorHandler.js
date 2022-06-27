@@ -4,7 +4,7 @@ const appError = (httpStatus, errMessage, field = '') => {
   if (field !== '') { error.field = field };
   error.statusCode = httpStatus;
   error.isOperational = true;
-  return error
+  return error;
 }
 
 // async func catch
@@ -12,7 +12,7 @@ const handleErrorAsync = function (func) {
   return function (req, res, next) {
     func(req, res, next).catch(
       function (error) {
-        return next(error)
+        return next(error);
       }
     )
   }
@@ -34,16 +34,16 @@ const resErrorDev = (err, res) => {
 const resErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
-      status: "false",
+      status: 'false',
       message: err.message
     });
   } else {
     // log 紀錄
-    console.error("出現重大錯誤", err);
+    console.error('出現重大錯誤', err);
     // HTTP 狀態碼：500 -> 送出罐頭預設訊息
     res.status(500).json({
-      status: "error",
-      message: "系統錯誤，請恰系統管理員"
+      status: 'error',
+      message: '系統錯誤，請恰系統管理員'
     });
   }
 }
@@ -53,22 +53,22 @@ const errorHandlerMainProcess = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     // dev
     if (process.env.NODE_ENV === 'dev') {
-      return resErrorDev(err, res)
+      return resErrorDev(err, res);
     }
     // production
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       if (err.isAxiosError === true) {
-        err.message = "axios 連線錯誤";
+        err.message = 'axios 連線錯誤';
         err.isOperational = true;
         return resErrorProd(err, res);
-      } else if (err.name === "CastError") {
+      } else if (err.name === 'CastError') {
         // mongoose 無法轉換值
-        err.message = "無效的 ID，請重新確認！";
+        err.message = '無效的 ID，請重新確認！';
         err.isOperational = true;
         return resErrorProd(err, res);
-      } else if (err.name === "SyntaxError") {
+      } else if (err.name === 'SyntaxError') {
         err.statusCode = 400;
-        err.message = "語法結構錯誤，請重新確認！";
+        err.message = '語法結構錯誤，請重新確認！';
         err.isOperational = true;
         return resErrorProd(err, res);
       }

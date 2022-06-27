@@ -13,27 +13,27 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(appError(401, '請輸入帳號密碼進行登入！', "token"));
+    return next(appError(401, '請輸入帳號密碼進行登入！', 'token'));
   }
 
   // 驗證 token 正確性 - 解密 token
   const getDecryptedJWT = (token) => jwt.verify(token, process.env.JWT_SECRET);
   const decoded = getDecryptedJWT(token);
-  if(!decoded){
-    return next(appError(401, '請輸入帳號密碼進行登入！', "decoded"));
+  if (!decoded) {
+    return next(appError(401, '請輸入帳號密碼進行登入！', 'decoded'));
   }
 
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
-    return next(appError(401, '請輸入帳號密碼進行登入！', "decoded.id"));
+    return next(appError(401, '請輸入帳號密碼進行登入！', 'decoded.id'));
   }
 
   req.user = currentUser; // 自訂屬性，傳到下一個 middleware
   next();
 });
 
+// 產生 JWT token
 const getJWT = (user) =>
-  // 產生 JWT token
   jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_DAY
   });

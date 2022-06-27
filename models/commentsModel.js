@@ -5,17 +5,17 @@ const commentsSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: [true, "請填寫創作者 ID"]
+      ref: 'User',
+      required: [true, '請填寫創作者 ID']
     },
     comment: {
       type: String,
-      required: [true, '請填寫留言內容'],
+      required: [true, '請填寫留言內容']
     },
     post: {
       type: mongoose.Schema.ObjectId,
       ref: 'Post',
-      require: [true, '請填寫貼文 ID'],
+      required: [true, '請填寫貼文 ID']
     },
     createdAt: { // 建立時間
       type: Date,
@@ -23,7 +23,7 @@ const commentsSchema = new mongoose.Schema(
     },
     updatedAt: { // 更新時間
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
   },
   {

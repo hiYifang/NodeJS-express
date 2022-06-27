@@ -14,25 +14,28 @@ const usersSchema = new mongoose.Schema(
       enum: [0, 1, 2]
     },
     avatar: {
-      type: String,
+      type: String
     },
     email: {
       type: String,
-      required: [true, "請填寫 Email"],
+      required: [true, '請填寫 Email'],
       unique: true,
       lowercase: true,
       select: false
     },
     password: {
       type: String,
-      required: [true, "請填寫密碼"],
+      required: [true, '請填寫密碼'],
       minlength: 8,
       select: false
     },
     // 設計稿 4.追蹤名單
     followers: [ // 自己
       {
-        user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+        user: {
+          type: mongoose.Schema.ObjectId, 
+          ref: 'User' 
+        },
         createdAt: { // 建立時間
           type: Date,
           default: Date.now
@@ -45,7 +48,10 @@ const usersSchema = new mongoose.Schema(
     ],
     following: [ // 別人
       {
-        user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User'
+        },
         createdAt: { // 建立時間
           type: Date,
           default: Date.now
